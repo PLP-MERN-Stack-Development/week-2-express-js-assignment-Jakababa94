@@ -23,7 +23,7 @@ This project is a RESTful API built with Express.js for managing products. It de
 
 2. **Install dependencies:**
    ```
-   npm install
+   npm install express body-parser uuid
    ```
 
 3. **Set up environment variables:**
