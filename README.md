@@ -1,63 +1,266 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=19690496&assignment_repo_type=AssignmentRepo)
 # Express.js RESTful API Assignment
 
-This assignment focuses on building a RESTful API using Express.js, implementing proper routing, middleware, and error handling.
+This project is a RESTful API built with Express.js for managing products. It demonstrates CRUD operations, middleware, error handling, filtering, pagination, and search.
 
-## Assignment Overview
+---
 
-You will:
-1. Set up an Express.js server
-2. Create RESTful API routes for a product resource
-3. Implement custom middleware for logging, authentication, and validation
-4. Add comprehensive error handling
-5. Develop advanced features like filtering, pagination, and search
+## 🚀 Getting Started
 
-## Getting Started
+### Prerequisites
 
-1. Accept the GitHub Classroom assignment invitation
-2. Clone your personal repository that was created by GitHub Classroom
-3. Install dependencies:
+- Node.js (v18 or higher)
+- npm (comes with Node.js)
+- [Postman](https://www.postman.com/), [Insomnia](https://insomnia.rest/), or `curl` for API testing
+
+### Installation
+
+1. **Clone the repository:**
+   ```
+   git clone https://github.com/PLP-MERN-Stack-Development/week-2-express-js-assignment-Jakababa94.git
+   
+   cd week-2-express-js-assignment-Jakababa94
+   ```
+
+2. **Install dependencies:**
    ```
    npm install
    ```
-4. Run the server:
+
+3. **Set up environment variables:**
+   - Copy `.env.example` to `.env` and fill in your values.
+   ```
+   cp .env.example .env
+   ```
+
+4. **Start the server:**
    ```
    npm start
    ```
+   The server will run on the port specified in your `.env` file (default: 3000).
 
-## Files Included
+---
 
-- `Week2-Assignment.md`: Detailed assignment instructions
-- `server.js`: Starter Express.js server file
-- `.env.example`: Example environment variables file
+## ⚙️ Environment Variables
 
-## Requirements
+Create a `.env` file in the root directory. Example:
 
-- Node.js (v18 or higher)
-- npm or yarn
-- Postman, Insomnia, or curl for API testing
+```
+PORT=3000
+API_KEY=your_api_key_here
+```
 
-## API Endpoints
+---
 
-The API will have the following endpoints:
+## 📚 API Documentation
 
-- `GET /api/products`: Get all products
-- `GET /api/products/:id`: Get a specific product
-- `POST /api/products`: Create a new product
-- `PUT /api/products/:id`: Update a product
-- `DELETE /api/products/:id`: Delete a product
+### Authentication
 
-## Submission
+All endpoints (except `GET /api/products` and `GET /api/products/:id`) require an `x-api-key` header with the correct API key.
 
-Your work will be automatically submitted when you push to your GitHub Classroom repository. Make sure to:
+---
 
-1. Complete all the required API endpoints
-2. Implement the middleware and error handling
-3. Document your API in the README.md
-4. Include examples of requests and responses
+### Endpoints
 
-## Resources
+#### 1. Get All Products
+
+- **GET** `/api/products`
+- **Query Parameters:**
+  - `category` (optional): Filter by category
+  - `page` (optional): Page number (default: 1)
+  - `limit` (optional): Items per page (default: 10)
+
+**Example Request:**
+```
+GET /api/products?page=1&limit=2&category=Electronics
+```
+
+**Example Response:**
+```json
+{
+  "products": [
+    {
+      "id": "uuid",
+      "name": "Laptop",
+      "description": "A powerful laptop",
+      "price": 1200,
+      "category": "Electronics",
+      "inStock": true
+    }
+  ],
+  "totalPages": 5,
+  "currentPage": 1
+}
+```
+
+---
+
+#### 2. Get Product by ID
+
+- **GET** `/api/products/:id`
+
+**Example Request:**
+```
+GET /api/products/123e4567-e89b-12d3-a456-426614174000
+```
+
+**Example Response:**
+```json
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "name": "Laptop",
+  "description": "A powerful laptop",
+  "price": 1200,
+  "category": "Electronics",
+  "inStock": true
+}
+```
+
+---
+
+#### 3. Create a New Product
+
+- **POST** `/api/products`
+- **Headers:** `x-api-key: your_api_key_here`
+- **Body:** (JSON)
+  - `name` (string, required)
+  - `description` (string, required)
+  - `price` (number, required)
+  - `category` (string, required)
+  - `inStock` (boolean, required)
+
+**Example Request:**
+```json
+POST /api/products
+Headers: x-api-key: your_api_key_here
+Body:
+{
+  "name": "Smartphone",
+  "description": "Latest model",
+  "price": 800,
+  "category": "Electronics",
+  "inStock": true
+}
+```
+
+**Example Response:**
+```json
+{
+  "id": "generated-uuid",
+  "name": "Smartphone",
+  "description": "Latest model",
+  "price": 800,
+  "category": "Electronics",
+  "inStock": true
+}
+```
+
+---
+
+#### 4. Update a Product
+
+- **PUT** `/api/products/:id`
+- **Headers:** `x-api-key: your_api_key_here`
+- **Body:** (JSON, any updatable fields)
+
+**Example Request:**
+```json
+PUT /api/products/123e4567-e89b-12d3-a456-426614174000
+Headers: x-api-key: your_api_key_here
+Body:
+{
+  "price": 1100,
+  "inStock": false
+}
+```
+
+**Example Response:**
+```json
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "name": "Laptop",
+  "description": "A powerful laptop",
+  "price": 1100,
+  "category": "Electronics",
+  "inStock": false
+}
+```
+
+---
+
+#### 5. Delete a Product
+
+- **DELETE** `/api/products/:id`
+- **Headers:** `x-api-key: your_api_key_here`
+
+**Example Request:**
+```
+DELETE /api/products/123e4567-e89b-12d3-a456-426614174000
+Headers: x-api-key: your_api_key_here
+```
+
+**Example Response:**
+```json
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "name": "Laptop",
+  "description": "A powerful laptop",
+  "price": 1100,
+  "category": "Electronics",
+  "inStock": false
+}
+```
+
+---
+
+#### 6. Search Products by Name
+
+- **GET** `/api/products/search?name=phone`
+
+**Example Response:**
+```json
+{
+  "products": [
+    {
+      "id": "uuid",
+      "name": "Smartphone",
+      "description": "Latest model",
+      "price": 800,
+      "category": "Electronics",
+      "inStock": true
+    }
+  ],
+  "totalResults": 1
+}
+```
+
+---
+
+#### 7. Get Product Statistics
+
+- **GET** `/api/products/stats`
+
+**Example Response:**
+```json
+{
+  "totalProducts": 5,
+  "totalValue": 5000,
+  "averagePrice": 1000
+}
+```
+
+---
+
+## 🧪 Example `.env.example`
+
+```
+PORT=3000
+API_KEY=your_api_key_here
+```
+
+---
+
+## 📖 Resources
 
 - [Express.js Documentation](https://expressjs.com/)
 - [RESTful API Design Best Practices](https://restfulapi.net/)
-- [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) 
+- [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
